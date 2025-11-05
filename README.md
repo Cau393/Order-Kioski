@@ -58,10 +58,12 @@ This is a standard Maven project. It is configured to use Java 21.
 
 Once the project is built, you can run the CLI application using the `java` command.
 
+```sh
+java -cp target/Order_Kiosk-1.0-SNAPSHOT.jar com.caue.kioski.cli.Main
+```
+
 ### How to run tests:
 ```
 mvn test
 ```
 
-```sh
-java -cp target/Order_Kiosk-1.0-SNAPSHOT.jar com.caue.kioski.cli.Main

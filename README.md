@@ -1,38 +1,32 @@
-# Order Kiosk CLI
+# Cafe Order Kiosk
 
-This project is a simple command-line interface (CLI) application for a digital order kiosk. It allows a user to manage a shopping cart, view menu items, and generate a final receipt with tax calculations.
+This project is a simple **Graphical User Interface (GUI)** application for a digital order kiosk, built using Java Swing. It allows a user to browse menu items, manage a shopping cart, and view a calculated receipt including tax.
 
 ## Project Purpose and Logic Flow
 
-The application provides a text-based interface for simulating a kiosk ordering system. A user can interact with the program through a set of simple commands to build an order and see the final cost.
+The application provides a graphical interface for simulating a café kiosk ordering system. Users interact with the GUI to select items, adjust quantities, and finalize their order.
 
 ### Main Classes
 
-* **`com.caue.kioski.cli.Main`**: The main entry point for the application. It initializes all necessary services and repositories and contains the primary input loop for processing user commands.
+* **`com.caue.kioski.app.Main`**: The main entry point for the application. It initializes the GUI by creating and displaying the **`MainFrame`** within the Swing event-dispatching thread.
+* **`com.caue.kioski.ui.MainFrame`**: The main window of the application. It constructs the various panels for item browsing, cart display (using a `JTable`), quantity input, and displays the running subtotal, tax, and total labels.
 * **Models (`MenuItem`, `Cart`, `CartItem`)**: These are the core data structures.
     * `MenuItem`: Represents a product in the catalog with a name, price, and category.
     * `Cart`: Holds a collection of `CartItem`s. It handles business logic like merging items (e.g., adding 2 coffees then 1 more coffee results in one line item of 3 coffees) and calculating the order subtotal.
 * **Repositories (`InMemoryCatalogRepository`, `FileReceiptRepository`)**:
-    * `InMemoryCatalogRepository`: Provides the list of available `MenuItem`s. In this project, it's a hard-coded list.
+    * `InMemoryCatalogRepository`: Provides the list of available `MenuItem`s (Coffee, Tea, Croissant, etc.). In this project, it's a hard-coded list.
     * `FileReceiptRepository`: Implements the logic to save a generated receipt to a timestamped text file.
 * **Services (`ReceiptService`, `FlatRateTaxCalculator`)**:
-    * `FlatRateTaxCalculator`: An implementation of the `TaxCalculator` interface that applies a simple flat-rate tax to a `BigDecimal` amount.
-    * `ReceiptService`: Responsible for taking a `Cart`, applying tax calculations, and formatting the complete order (items, subtotal, tax, and total) into a list of strings ready for printing.
+    * `FlatRateTaxCalculator`: An implementation of the `TaxCalculator` interface that applies a simple flat-rate tax to a `BigDecimal` amount (typically 6%).
+    * `ReceiptService`: Responsible for taking a `Cart`, applying tax calculations, and formatting the complete order into a list of strings (the receipt content).
 
 ### Logic Flow
 
-1.  The `Main` class starts and initializes the `InMemoryCatalogRepository`, `Cart`, and `ReceiptService`. The `ReceiptService` is configured with a `FlatRateTaxCalculator` set to 6%.
-2.  The application enters a command loop, printing a `> ` prompt and waiting for user input.
-3.  User input is parsed into commands. The available commands are:
-    * `menu`: Lists all items from the `InMemoryCatalogRepository` with their prices.
-    * `add <Name> <Qty>`: Adds a specified quantity of an item to the cart. For example: `add Coffee 2`.
-    * `remove <Name>`: Removes an item line from the cart.
-    * `show`: Displays the current items in the cart, their quantities, and line totals.
-    * `receipt`: Generates and prints a full receipt, including all items, the subtotal, the calculated tax, and the grand total.
-    * `help`: Prints the list of available commands.
-    * `quit`: Exits the application.
+1.  The application starts in `com.caue.kioski.app.Main`, which initializes the Swing GUI by making the `MainFrame` visible.
+2.  The GUI components, including the menu list and cart table, are rendered.
+3.  User interactions (e.g., clicking **"Add to Cart"** or **"Checkout..."**) trigger methods in the underlying business logic (like `Cart.add` or `ReceiptService.render`) to update the cart data and recalculate totals.
 
----
+***
 
 ## How to Build and Run
 
@@ -56,14 +50,13 @@ This is a standard Maven project. It is configured to use Java 21.
 
 ### Running the Program
 
-Once the project is built, you can run the CLI application using the `java` command.
+Once the project is built, you can run the GUI application using the `java` command, pointing to the new main class:
 
 ```sh
-java -cp target/Order_Kiosk-1.0-SNAPSHOT.jar com.caue.kioski.cli.Main
+java -cp target/Order_Kiosk-1.0-SNAPSHOT.jar com.caue.kioski.app.Main
 ```
 
 ### How to run tests:
 ```
 mvn test
 ```
-
